@@ -80,6 +80,5 @@ export const styles = StyleSheet.create({
         backgroundColor: '#E9EDF2',
         fontSize: 12,
         flex: 1,
-        resizeMode: 'center'
     },
 });
