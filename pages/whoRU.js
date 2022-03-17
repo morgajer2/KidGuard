@@ -66,6 +66,7 @@ export const WhoRUScreen = ({ navigation }) => {
                                 </ImageBackground>
                             </TouchableOpacity>
                         </View>
+                        <Text style={{ color: gray_color, fontSize: 10, alignSelf:'center', paddingBottom: 10}}>Already have an acoount? <Text style={styles.text_link} onPress={()=>navigation.navigate('SignIn')}>Sign in</Text></Text>
                     </View>
                 ) : (
                     //Kid: (Generate code)
