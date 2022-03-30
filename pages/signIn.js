@@ -2,41 +2,42 @@ import { Text, View, TouchableOpacity, ImageBackground, TextInput } from 'react-
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
 import * as React from 'react';
+import { auth } from '../firebase';
+import { useState } from 'react';
 
 
 import { general_color, gray_color, orange_color, styles } from './styles/styleSheet1';
 
 export const SignInScreen = ({ navigation }) => {
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
 
   const signIn = () => {
     console.log('signIn: checking values fron user...');
-    var error = "";
 
     if (email.length == 0 || password.length == 0) {
-      errorAlert("All filleds are required.");
+      setErrorMsg("All filleds are required.");
       return;
     }
 
-    //TODO: arrange!
+    handleLogin();
 
-    //checking email:
-    var re = /\S+@\S+\.\S+/;
-    var eAns = re.test(email);
-    (!eAns) ? error += "Email address is not valid." : null;
-
-    //checking password:
-    (password.length < 6) ? error += " Password must have at least 6 characters." : null;
-
-    //error display
-    (error != "") ? errorAlert(error) : null;
-    
-    //addNewUser(email, fullName, password, errorAlert);
   };
 
-  const errorAlert = (ans) => { if (ans == true) setErrorMsg("You alredy have an account. Please try to sign in."); else if (typeof ans == typeof firebase.database().ref()) { setErrorMsg(""); navigation.navigate('SignIn'); /* TODO: show a message to the user that "registered successfully" */ } else setErrorMsg(ans) }
+  const handleLogin =() => {
+    auth.signInWithEmailAndPassword(email,password).then(userCredentials => {
+      const user = userCredentials.user;
+      console.log(user.email);
+      navigation.navigate('personalPage');
+      
+    }). catch(error => alert(error.message))
+
+  }
+
+  //const errorAlert = (ans) => { if (ans == true) setErrorMsg("You alredy have an account. Please try to sign in."); else if (typeof ans == typeof firebase.database().ref()) { setErrorMsg(""); navigation.navigate('SignIn'); /* TODO: show a message to the user that "registered successfully" */ } else setErrorMsg(ans) }
 
   return (
 
@@ -53,6 +54,9 @@ export const SignInScreen = ({ navigation }) => {
           <Text style={{ fontSize: 30, textAlign: 'center', paddingTop: 46, color: general_color }}>Welcome Back</Text>
         </View>
         <View style={{ paddingTop: 35, alignSelf: 'center', flex: 1 }}>
+        { errorMsg.length > 0 &&
+          <Text style={{ color: 'red', fontSize: 12, textAlign: 'center' }}>{ errorMsg }</Text>
+        }
           <TextInput
             value={email}
             onChangeText={(text) => setEmail(text)}
@@ -68,7 +72,7 @@ export const SignInScreen = ({ navigation }) => {
           />
         </View>
         <View style={{ flex: 2, alignContent: 'center' }}>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => { signIn }}>
+          <TouchableOpacity activeOpacity={0.5} onPress={ signIn }>
             <ImageBackground source={require('../assets/Images/mainButton.png')} style={styles.image_button} >
               <Text textAnchor="middle" style={styles.text_button}>Sign In</Text>
             </ImageBackground>

@@ -35,13 +35,15 @@ export const WhoRUScreen = ({ navigation }) => {
         (password.length < 6) ? error += " Password must have at least 6 characters." : null;
 
         //error display
-        (error != "") ?  setErrorMsg(error) : handleSignUp(email, password);
+        (error != "") ?  setErrorMsg(error) : handleSignUp();
     };
 
-    const handleSignUp = (email, password) => {
+    const handleSignUp = () => {
         auth.createUserWithEmailAndPassword(email, password).then(userCredentials => {
           const user = userCredentials.user;
           console.log(user.email);
+          navigation.navigate('SignIn');
+
         }). catch(error => alert(error.message))
       };
 

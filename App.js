@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen } from './pages/homePage'
 import { WhoRUScreen } from './pages/whoRU'
 import { SignInScreen } from './pages/signIn'
+import {PersonalScreen} from './pages/personalPage'
 
 //Disable "Setting a timer" warning.
 import { LogBox } from 'react-native';
@@ -25,6 +26,8 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="WhoRU" component={WhoRUScreen} options={{ title: "Start Discovering" }} />
         <Stack.Screen name="SignIn" component={SignInScreen} options={{ title: "Start Discovering" }} />
+        <Stack.Screen name="personalPage" component={PersonalScreen} options={{ title: "Start Discovering" }} />
+
       </Stack.Navigator>
       <View>
         <StatusBar backgroundColor='#fff' barStyle='dark-content' />
