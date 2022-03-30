@@ -7,6 +7,7 @@ import { general_color, gray_color, orange_color, styles } from './styles/styleS
 import { addNewUser } from '../firebase';
 import * as firebase from "firebase";
 
+import { auth } from '../firebase';
 
 export const WhoRUScreen = ({ navigation }) => {
     const [shouldShow, setShouldShow] = useState(true); // to hide and show components
@@ -21,7 +22,7 @@ export const WhoRUScreen = ({ navigation }) => {
         var error = "";
 
         if (email.length == 0 || fullName.length == 0 || password.length == 0) {
-            errorAlert("All filleds are required.");
+            setErrorMsg("All filleds are required.");
             return;
         }
 
@@ -34,14 +35,20 @@ export const WhoRUScreen = ({ navigation }) => {
         (password.length < 6) ? error += " Password must have at least 6 characters." : null;
 
         //error display
-        (error != "") ? errorAlert(error) : addNewUser(email, fullName, password, errorAlert);
+        (error != "") ?  setErrorMsg(error) : handleSignUp(email, password);
     };
 
-    const errorAlert = (ans) => { if (ans == true) setErrorMsg("You alredy have an account. Please try to sign in."); else if (typeof ans == typeof firebase.database().ref()) { setErrorMsg(""); navigation.navigate('SignIn'); /* TODO: show a message to the user that "registered successfully" */ } else setErrorMsg(ans) }
+    const handleSignUp = (email, password) => {
+        auth.createUserWithEmailAndPassword(email, password).then(userCredentials => {
+          const user = userCredentials.user;
+          console.log(user.email);
+        }). catch(error => alert(error.message))
+      };
 
 
     const getCode = () => {
         return "5V8F";
+        //TODO
     };
 
     return (
@@ -68,13 +75,13 @@ export const WhoRUScreen = ({ navigation }) => {
                         <View style={{ paddingTop: 35, alignSelf: 'center', flex: 3 }}>
                             {
                                 errorMsg.length > 0 &&
-                                <Text style={{ color: 'red', fontSize: 12, textAlign: 'center' }}>{errorMsg}</Text>
+                                <Text style={{ color: 'red', fontSize: 12, textAlign: 'center' }}>{ errorMsg }</Text>
                             }
                             <TextInput
                                 value={fullName}
                                 onChangeText={(text) => {
-                                    errorAlert(false);
-                                    //disallow special characters
+                                    setErrorMsg('');
+                                    //disallow special characters:
                                     var ch = text[text.length - 1];
                                     if (ch == ' ' || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'))
                                         setFullName(text);
@@ -86,13 +93,13 @@ export const WhoRUScreen = ({ navigation }) => {
                             />
                             <TextInput
                                 //value={this.state.username}
-                                onChangeText={(text) => { errorAlert(false); return setEmail(text) }}
+                                onChangeText={(text) => { setErrorMsg(''); return setEmail(text) }}
                                 placeholder={'Email address'}
                                 style={styles.input}
                             />
                             <TextInput
                                 //value={this.state.password}
-                                onChangeText={(text) => { errorAlert(false); return setPassword(text) }}
+                                onChangeText={(text) => { setErrorMsg(''); return setPassword(text) }}
                                 placeholder={'Password'}
                                 secureTextEntry={true}
                                 style={styles.input}
@@ -100,7 +107,7 @@ export const WhoRUScreen = ({ navigation }) => {
                         </View>
 
                         <View style={{ alignContent: 'center', paddingTop: 20, flex: 1 }}>
-                            <TouchableOpacity activeOpacity={0.5} onPress={signUp}>
+                            <TouchableOpacity activeOpacity={0.5} onPress={ signUp }>
                                 <ImageBackground source={require('../assets/Images/mainButton.png')} style={styles.image_button} >
                                     <Text textAnchor="middle" style={styles.text_button}>Start Discovering <Image style={{ height: 12, width: 14 }} source={require('../assets/Images/arrow.png')} /></Text>
                                 </ImageBackground>

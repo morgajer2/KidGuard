@@ -16,11 +16,14 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let app;
-if(firebase.apps.length == 0){
-    app = firebase.initializeApp(firebaseConfig);
+if (firebase.apps.length == 0) {
+  app = firebase.initializeApp(firebaseConfig);
 } else {
-    app = firebase.app();
+  app = firebase.app();
 }
+
+const auth = firebase.auth();
+export { auth };
 
 /**
  * 
@@ -30,21 +33,21 @@ if(firebase.apps.length == 0){
  * @param {function} _callback - function to update rather the user exists in the DB or not.
  */
 export function addNewUser(email, fullName, password, _callback) {
-    const dbRef = firebase.database().ref();
-    dbRef.child("users").child(fullName).get().then((snapshot) => {
-      if (snapshot.exists()) {
-        _callback(true);
-      } else {
-        //no user found, then add:
-        var ref = firebase.database().ref('users/' + fullName);
-        ref.set({
-            email: email,
-            password: password,
-          });
-        _callback(ref)
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-}  
+  const dbRef = firebase.database().ref();
+  dbRef.child("users").child(fullName).get().then((snapshot) => {
+    if (snapshot.exists()) {
+      _callback(true);
+    } else {
+      //no user found, then add:
+      var ref = firebase.database().ref('users/' + fullName);
+      ref.set({
+        email: email,
+        password: password,
+      });
+      _callback(ref)
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+}
 

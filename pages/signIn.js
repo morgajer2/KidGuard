@@ -3,13 +3,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
 import * as React from 'react';
 
+
 import { general_color, gray_color, orange_color, styles } from './styles/styleSheet1';
 
 export const SignInScreen = ({ navigation }) => {
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-
 
   const signIn = () => {
     console.log('signIn: checking values fron user...');
@@ -37,7 +37,6 @@ export const SignInScreen = ({ navigation }) => {
   };
 
   const errorAlert = (ans) => { if (ans == true) setErrorMsg("You alredy have an account. Please try to sign in."); else if (typeof ans == typeof firebase.database().ref()) { setErrorMsg(""); navigation.navigate('SignIn'); /* TODO: show a message to the user that "registered successfully" */ } else setErrorMsg(ans) }
-
 
   return (
 
