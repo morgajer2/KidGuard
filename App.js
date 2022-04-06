@@ -27,7 +27,6 @@ export default function App() {
         <Stack.Screen name="WhoRU" component={WhoRUScreen} options={{ title: "Start Discovering" }} />
         <Stack.Screen name="SignIn" component={SignInScreen} options={{ title: "Start Discovering" }} />
         <Stack.Screen name="personalPage" component={PersonalScreen} options={{ title: "Start Discovering" }} />
-
       </Stack.Navigator>
       <View>
         <StatusBar backgroundColor='#fff' barStyle='dark-content' />

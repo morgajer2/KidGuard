@@ -15,8 +15,8 @@ export const HomeScreen = ({ navigation }) => {
         />
         <View style={{ height: '90%', width: '90%', borderRadius: 10.0, backgroundColor: '#fff', overflow: 'hidden' }}>
           <View style={[styles.container, { flex: 3 }]}>
-            <Image source={require('../assets/Images/mainIcon.png')} />
-            <Text style={{ fontSize: 30, textAlign: 'center', paddingTop: 46, color:general_color }}>Get Notified,{"\n"}
+            <Image style={{height: 120, width:180 }} source={require('../assets/Images/mainLogo.png')} />
+            <Text style={{ fontSize: 30, textAlign: 'center', paddingTop: 40, color:general_color }}>Get Notified,{"\n"}
               <Text style={{ color: orange_color }}>Protect</Text> your Kids</Text>
             <Text style={{ fontSize: 15, paddingTop: 27, color:general_color }}>Discover potential cyber bullying</Text>
           </View>
