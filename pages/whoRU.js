@@ -67,9 +67,9 @@ export const WhoRUScreen = ({ navigation }) => {
             />
             <KeyboardAvoidingView style={{ height: '90%', width: '90%', borderRadius: 10.0, backgroundColor: '#fff', overflow: 'hidden' }}>
                 <View style={[styles.container, { flex: 1 }]}>
-                    <Image source={require('../assets/Images/mainIcon.png')} style={{ height: 18, width: 18 }} />
-                    <Text style={{ fontSize: 23, textAlign: 'center', color: general_color }}>So who are we{"\n"}talking to?</Text>
-                    <Text style={{ fontSize: 12, color: gray_color, textAlign: 'center' }}>{"\n"}Please tell us a bit about{"\n"}yourself, you are a</Text>
+                    <Image source={require('../assets/Images/mainIcon.png')} style={{ height: 22, width: 22 }} />
+                    <Text style={{ fontSize: 30, textAlign: 'center', color: general_color }}>So who are we{"\n"}talking to?</Text>
+                    <Text style={{ fontSize: 16, color: gray_color, textAlign: 'center' }}>{"\n"}Please tell us a bit about{"\n"}yourself, you are a</Text>
                 </View>
                 {shouldShow ? (
                     //Parent: (Register)
@@ -136,8 +136,8 @@ export const WhoRUScreen = ({ navigation }) => {
                         </View>
                         */}
                         <View style={{ alignSelf: 'center', flex: 2 }}>
-                            <View style={{ alignSelf: 'center', paddingTop: 20, flex: 1 }}>
-                                <Text style={{ color: gray_color, fontSize: 15, paddingBottom: 20 }}>Enter the uniqe code of your kid: </Text>
+                            <View style={{ alignSelf: 'center', paddingTop: 0, flex: 1 }}>
+                                <Text style={{ color: gray_color, fontSize: 20, paddingBottom: 20 }}>Enter the uniqe code of your kid: </Text>
                                 <TextInput
                                     value={code}
                                     onChangeText={(text) => setCode(text)}
