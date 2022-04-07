@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, ImageBackground, TextInput, KeyboardAvoidingView, ScrollView, Dimensions  } from 'react-native';
+import { Text, View, TouchableOpacity, ImageBackground, TextInput, KeyboardAvoidingView, ScrollView, Dimensions, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
 import React, { useState } from 'react';
@@ -18,6 +18,8 @@ export const WhoRUScreen = ({ navigation }) => {
     const [errorMsg, setErrorMsg] = useState('');
     const [code, setCode] = useState('');
 
+
+    //--- SIGN UP - PARENT ---
     const signUp = () => {
         console.log('signUp: checking values fron user...');
         var error = "";
@@ -42,23 +44,41 @@ export const WhoRUScreen = ({ navigation }) => {
     const handleSignUp = () => {
         auth.createUserWithEmailAndPassword(email, password).then(userCredentials => {
             const user = userCredentials.user;
+            addNewUser(user.uid, fullName);
             console.log(user.email);
             navigation.navigate('SignIn');
 
         }).catch(error => alert(error.message))
     };
 
+    //--- CHILD ---
     const ConnectToCode = () => {
+        const dbRef = firebase.database().ref();
+        dbRef.child("Kids").child(code).get().then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+
+                //console.log("mor: " + snapshot.val()["AFEVA7Ja2qUTwMVYYyUUww4aSaf2"]);
+                navigation.navigate("kidSnapshot");
+
+            } else {
+                alert("This code was not found. Please try again.")
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
 
     };
 
-    const getCode = () => {
+    /*const getCode = () => {
         return "5V8F";
         //TODO
-    };
+    };*/
 
+    //--- GUI ---
     return (
-        
+
         <View style={styles.container} >{/*style={[styles.container,{minHeight: Dimensions.get('screen').height - 100, minWidth:Dimensions.get('screen').width}]}*/}
             <LinearGradient
                 // Background Linear Gradient
@@ -124,7 +144,7 @@ export const WhoRUScreen = ({ navigation }) => {
                     </View>
                 ) : (
                     //Kid: (Generate code)
-                    <View style={[styles.container, { flex: 2, alignItems:'center' }]}>
+                    <View style={[styles.container, { flex: 2, alignItems: 'center' }]}>
                         <View style={{ flexDirection: 'row', alignSelf: 'center', flex: 1 }}>
                             <TouchableOpacity onPress={/*() => { navigation.navigate('Register') }*/() => setShouldShow(!shouldShow)} title="Parent" style={styles.other_type_button}><Text textAnchor="middle" style={styles.other_type_text}><Image style={{ height: 12, width: 18, resizeMode: 'center', paddingRight: 3 }} source={require('../assets/Images/coffeeOrange.png')} />Parent</Text></TouchableOpacity>
                             <View style={[styles.type_button, { left: 12 }]}><Text textAnchor="middle" style={styles.type_text}><Image style={{ height: 15, width: 18, resizeMode: 'center', paddingRight: 3 }} source={require('../assets/Images/hatGray.png')} />Kid</Text></View>
@@ -146,7 +166,7 @@ export const WhoRUScreen = ({ navigation }) => {
                                     secureTextEntry={true}
                                 />
                             </View>
-                            <View style={{ alignContent:'center', paddingTop: 60, flex: 1 }}>
+                            <View style={{ alignContent: 'center', paddingTop: 60, flex: 1 }}>
                                 <TouchableOpacity activeOpacity={0.5} onPress={ConnectToCode}>
                                     <ImageBackground source={require('../assets/Images/mainButton.png')} style={styles.image_button} >
                                         <Text textAnchor="middle" style={styles.text_button}>Connect</Text>

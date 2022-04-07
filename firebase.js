@@ -30,22 +30,19 @@ export { auth };
  * @param {String} email - the user's email
  * @param {String} fullName - the user's full name
  * @param {String} password - the user's password
- * @param {function} _callback - function to update rather the user exists in the DB or not.
  */
-export function addNewUser(email, fullName, password, _callback) {
+export function addNewUser(Uid, fullName) {
   const dbRef = firebase.database().ref();
-  dbRef.child("users").child(fullName).get().then((snapshot) => {
-    if (snapshot.exists()) {
-      _callback(true);
-    } else {
-      //no user found, then add:
-      var ref = firebase.database().ref('users/' + fullName);
+  dbRef.child("users").child(Uid).get().then((snapshot) => {
+      //no user found, add:
+      var ref = firebase.database().ref('users/' + Uid);
       ref.set({
-        email: email,
-        password: password,
+        fullName: fullName,
+        children: {yarin: 1000}
       });
-      _callback(ref)
-    }
+      //_callback(ref)
+      console.log("Sign Up seccessfull");
+    
   }).catch((error) => {
     console.error(error);
   });
