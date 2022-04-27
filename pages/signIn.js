@@ -5,6 +5,7 @@ import * as React from 'react';
 import { auth } from '../firebase';
 import { useState } from 'react';
 
+import * as firebase from "firebase";
 
 import { general_color, gray_color, orange_color, styles } from './styles/styleSheet1';
 
@@ -27,13 +28,26 @@ export const SignInScreen = ({ navigation }) => {
 
   };
 
-  const handleLogin =() => {
-    auth.signInWithEmailAndPassword(email,password).then(userCredentials => {
+  const handleLogin = () => {
+    auth.signInWithEmailAndPassword(email, password).then(userCredentials => {
       const user = userCredentials.user;
-      console.log(user.email);
-      navigation.navigate('personalPage');
-      
-    }). catch(error => alert(error.message))
+      console.log(user.uid);
+
+      //get all the data about the user
+      const dbRef = firebase.database().ref();
+      var ref = dbRef.child("users").child(user.uid);
+      ref.get().then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log("SIGN-IN- user found: "+ JSON.stringify(snapshot.val()));
+          navigation.navigate('personalPage',{userCredentials: userCredentials, userDitails: snapshot.val()});
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+
+    }).catch(error => alert(error.message))
 
   }
 
@@ -54,9 +68,9 @@ export const SignInScreen = ({ navigation }) => {
           <Text style={{ fontSize: 30, textAlign: 'center', paddingTop: 46, color: general_color }}>Welcome Back</Text>
         </View>
         <View style={{ paddingTop: 35, alignSelf: 'center', flex: 1 }}>
-        { errorMsg.length > 0 &&
-          <Text style={{ color: 'red', fontSize: 12, textAlign: 'center' }}>{ errorMsg }</Text>
-        }
+          {errorMsg.length > 0 &&
+            <Text style={{ color: 'red', fontSize: 12, textAlign: 'center' }}>{errorMsg}</Text>
+          }
           <TextInput
             value={email}
             onChangeText={(text) => setEmail(text)}
@@ -72,7 +86,7 @@ export const SignInScreen = ({ navigation }) => {
           />
         </View>
         <View style={{ flex: 2, alignContent: 'center' }}>
-          <TouchableOpacity activeOpacity={0.5} onPress={ signIn }>
+          <TouchableOpacity activeOpacity={0.5} onPress={signIn}>
             <ImageBackground source={require('../assets/Images/mainButton.png')} style={styles.image_button} >
               <Text textAnchor="middle" style={styles.text_button}>Sign In</Text>
             </ImageBackground>
