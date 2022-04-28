@@ -34,15 +34,30 @@ export { auth };
 export function addNewUser(Uid, fullName) {
   const dbRef = firebase.database().ref();
   dbRef.child("users").child(Uid).get().then((snapshot) => {
-      //no user found, add:
-      var ref = firebase.database().ref('users/' + Uid);
-      ref.set({
-        fullName: fullName,
-        children: {yarin: 1000}
-      });
-      //_callback(ref)
-      console.log("Sign Up seccessfull");
-    
+    //no user found, add:
+    var ref = firebase.database().ref('users/' + Uid);
+    ref.set({
+      fullName: fullName,
+      children: { yarin: 1000 }
+    });
+    //_callback(ref)
+    console.log("Sign Up seccessfull");
+
+  }).catch((error) => {
+    console.error(error);
+  });
+}
+
+export function findUserByID(Uid) {
+  const dbRef = firebase.database().ref();
+  var ref = dbRef.child("users").child(Uid);
+  ref.get().then((snapshot) => {
+    if (snapshot.exists()) {
+      console.log(snapshot.val());
+      ditails = snapshot.val();
+    } else {
+      console.log("No data available");
+    }
   }).catch((error) => {
     console.error(error);
   });

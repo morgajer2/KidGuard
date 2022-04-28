@@ -8,8 +8,32 @@ import { addNewUser } from '../firebase';
 import * as firebase from "firebase";
 
 import { auth } from '../firebase';
+import * as toxicity from '@tensorflow-models/toxicity';
 
 export const KidScreen = ({ navigation }) => {
+
+    const AI = () => {
+        // The minimum prediction confidence.
+        const threshold = 0.9;
+
+        // Which toxicity labels to return.
+        const labelsToInclude = ['identity_attack', 'insult', 'threat'];
+        console.log("yarin");
+
+        toxicity.load(threshold, labelsToInclude).then(model => {
+            // Now you can use the `model` object to label sentences. 
+            model.classify(['you suck']).then(predictions => 
+                { console.log("mor!!!!!!!!") })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }).catch(function (error) {
+            console.log("load"+error);
+        });
+    };
+
+    AI();
+
     return (
 
         <View style={styles.container} >{/*style={[styles.container,{minHeight: Dimensions.get('screen').height - 100, minWidth:Dimensions.get('screen').width}]}*/}
