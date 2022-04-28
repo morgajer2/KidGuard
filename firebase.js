@@ -38,7 +38,7 @@ export function addNewUser(Uid, fullName) {
     var ref = firebase.database().ref('users/' + Uid);
     ref.set({
       fullName: fullName,
-      children: { yarin: 1000 }
+      children: {  }
     });
     //_callback(ref)
     console.log("Sign Up seccessfull");

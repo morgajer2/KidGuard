@@ -12,7 +12,9 @@ import * as toxicity from '@tensorflow-models/toxicity';
 
 export const KidScreen = ({ navigation }) => {
 
-    const AI = () => {
+
+
+    /*const AI = () => {
         // The minimum prediction confidence.
         const threshold = 0.9;
 
@@ -33,19 +35,25 @@ export const KidScreen = ({ navigation }) => {
     };
 
     AI();
+*/
 
+const backToSignIn= () => {
+    navigation.navigate('SignIn');
+
+  };
     return (
 
-        <View style={styles.container} >{/*style={[styles.container,{minHeight: Dimensions.get('screen').height - 100, minWidth:Dimensions.get('screen').width}]}*/}
-            <LinearGradient
-                // Background Linear Gradient
-                colors={['#0F8CFF', '#274EF3', '#3E8CE8']}
-                style={styles.background}
-            />
-            <KeyboardAvoidingView style={{ height: '90%', width: '90%', borderRadius: 10.0, backgroundColor: '#fff', overflow: 'hidden' }}>
-                <Text>Thank you</Text>
-            </KeyboardAvoidingView>
-        </View>
+        <View style={{ paddingTop: 50, paddingLeft: 10 }}>
+         <Image style={{alignSelf:'center' }} source={require('../assets/Images/mainIcon.png')} />
+         <Image style={{alignSelf:'center'}} source={require('../assets/Images/Group71.png')} />
+         <Text style={{ fontSize: 35, textAlign: 'center', paddingTop: 20, paddingBottom: 35,fontWeight: 'bold' }}>Nothing out{"\n"}of line here... </Text>
+         <TouchableOpacity activeOpacity={0.5} onPress={backToSignIn}>
+            <ImageBackground source={require('../assets/Images/mainButton.png')} style={styles.image_button} >
+              <Text textAnchor="middle" style={styles.text_button}>Im a grown up</Text>
+            </ImageBackground>
+          </TouchableOpacity>
 
+
+        </View>
     );
 };
