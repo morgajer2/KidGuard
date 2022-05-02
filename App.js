@@ -12,6 +12,7 @@ import { WhoRUScreen } from './pages/whoRU'
 import { SignInScreen } from './pages/signIn'
 import {PersonalScreen} from './pages/personalPage'
 import { KidScreen } from './pages/kidSnapshot';
+import {imageGalleryScreen} from './pages/imageGallery';
 
 //Disable "Setting a timer" warning.
 import { LogBox } from 'react-native';
@@ -29,6 +30,8 @@ export default function App() {
         <Stack.Screen name="SignIn" component={SignInScreen} options={{ title: "Start Discovering" }} />
         <Stack.Screen name="personalPage" component={PersonalScreen} options={{ title: "Start Discovering" }} />
         <Stack.Screen name="kidSnapshot" component={KidScreen} options={{ title: "KidScreen" }} />
+        <Stack.Screen name="imageGallery" component={imageGalleryScreen} options={{ title: "imageGalleryScreen" }} />
+
       </Stack.Navigator>
       <View>
         <StatusBar backgroundColor='#fff' barStyle='dark-content' />

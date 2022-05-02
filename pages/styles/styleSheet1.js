@@ -112,4 +112,10 @@ export const styles = StyleSheet.create({
       buttonOpen: {
         backgroundColor: "#3E8CE8",
       },
+      item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
+        textAlign:'center'
+      },
 });

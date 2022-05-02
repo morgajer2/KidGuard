@@ -12,8 +12,6 @@ import * as toxicity from '@tensorflow-models/toxicity';
 
 export const KidScreen = ({ navigation }) => {
 
-
-
     /*const AI = () => {
         // The minimum prediction confidence.
         const threshold = 0.9;
@@ -44,9 +42,9 @@ const backToSignIn= () => {
     return (
 
         <View style={{ paddingTop: 50, paddingLeft: 10 }}>
-         <Image style={{alignSelf:'center' }} source={require('../assets/Images/mainIcon.png')} />
-         <Image style={{alignSelf:'center'}} source={require('../assets/Images/Group71.png')} />
-         <Text style={{ fontSize: 35, textAlign: 'center', paddingTop: 20, paddingBottom: 35,fontWeight: 'bold' }}>Nothing out{"\n"}of line here... </Text>
+         <Image style={{alignSelf:'center'  }} source={require('../assets/Images/mainIcon.png')} />
+         <Image style={{alignSelf:'center', marginTop: 100}} source={require('../assets/Images/Group71.png')} />
+         <Text style={{ fontSize: 35, textAlign: 'center', paddingTop: 20, paddingBottom: 35,fontWeight: 'bold',marginBottom:50 }}>Nothing out{"\n"}  of line here... </Text>
          <TouchableOpacity activeOpacity={0.5} onPress={backToSignIn}>
             <ImageBackground source={require('../assets/Images/mainButton.png')} style={styles.image_button} >
               <Text textAnchor="middle" style={styles.text_button}>Im a grown up</Text>

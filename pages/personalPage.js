@@ -1,5 +1,5 @@
 
-import { Text, View, TouchableOpacity, ImageBackground, TextInput, Modal, Pressable } from 'react-native';
+import { Text, View, TouchableOpacity, ImageBackground, TextInput, Modal, Pressable,FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
 import * as React from 'react';
@@ -23,6 +23,8 @@ export const PersonalScreen = ({ route, navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [addDisable, setAddDisable] = useState(false);
   const [imgSource, setImgSource] = useState(addB);
+  const [childList, setChildList] = useState(userDitails.children);
+
 
 
   const logOut = () => {
@@ -52,25 +54,36 @@ export const PersonalScreen = ({ route, navigation }) => {
 
     //enter ditails to the DB
     var uId = userCredentials.user.uid;
-    console.log('uId: '+JSON.stringify(userDitails));  // TODO - re-read from DB!
-    var ch = {kidName:kidName,kidCode:code.toString()};
-    if(typeof userDitails.childern != 'undefined')
-      ch = userDitails.children.push(ch);
-    const dbRef = firebase.database().ref();
-    dbRef.child("users").child(uId).get().then((snapshot) => {
-      //no user found, add:
-      var ref = firebase.database().ref('users/' + uId+'/children');
-      ref.set(
 
-      ch
-        
-    );
-      //_callback(ref)
-      console.log("add kid seccessfull");
 
-    }).catch((error) => {
-      console.error(error);
-    });
+    var newKid = { kidName: kidName, kidCode: code.toString() };
+    //console.log("children: " + JSON.stringify(userDitails));
+    if ('children' in userDitails) {
+      userDitails.children[userDitails.children.length] = newKid;
+    }
+    else {
+      userDitails['children'] = [newKid];
+    }
+
+    // console.log('childList: ' + JSON.stringify(userDitails.children));
+
+    var ref = firebase.database().ref('users/' + uId + '/children/');
+    ref.set(userDitails.children);
+
+    var temp = {};
+    ref = firebase.database().ref('Kids/');
+
+    ref.get().then((snapshot)=>{
+      var temp=snapshot.val();
+      console.log(JSON.stringify(snapshot.val()))
+      temp[code]=uId;
+      ref.set(temp);
+    })
+    
+
+    setChildList(userDitails.children);
+
+
   }
 
 
@@ -99,17 +112,18 @@ export const PersonalScreen = ({ route, navigation }) => {
 
 
       <View style={{ flex: 5 }}>
-        <View style={{ flex: 1 }}>
           <View style={{ flex: 1, paddingTop: 50 }}>
-            {/*Images */}
+            <FlatList
+              data={childList}
+              renderItem={({ item }) =>(<View style={{borderRadius: 20.0, backgroundColor: '#fff', overflow: 'hidden', minWidth:'50%',marginBottom:10}}>
+                                        <Text style={styles.item} onPress={()=>{navigation.navigate('imageGallery',{code:item.kidCode})}}>{item.kidName}</Text>
+                                        </View>)}
+            />
           </View>
-          <View style={{ flex: 1 }}>
-
-          </View>
-        </View>
+    
       </View>
       <View style={{ flex: 1 }}>
-        <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }} onPress={() =>{ setModalVisible(true); setKidName(''); setKidCode('     '); setAddDisable(false); setImgSource(addB); }}>Add a new kid +</Text>
+        <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }} onPress={() => { setModalVisible(true); setKidName(''); setKidCode('     '); setAddDisable(false); setImgSource(addB); }}>Add a new kid +</Text>
       </View>
 
       <View style={styles.centeredView}>
