@@ -10,7 +10,7 @@ import * as firebase from "firebase";
 import { auth } from '../firebase';
 import * as toxicity from '@tensorflow-models/toxicity';
 
-export const imageGalleryScreen = ({ route, navigation }) => {
+export const ImageGalleryScreen = ({ route, navigation }) => {
     const { code } = route.params;
 
 

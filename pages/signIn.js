@@ -39,7 +39,7 @@ export const SignInScreen = ({ navigation }) => {
       ref.get().then((snapshot) => {
         if (snapshot.exists()) {
           console.log("SIGN-IN- user found: "+ JSON.stringify(snapshot.val()));
-          navigation.navigate('personalPage',{userCredentials: userCredentials, userDitails: snapshot.val()});
+          navigation.navigate('personalPage',{user: userCredentials.user, userDitails: snapshot.val()});
         } else {
           console.log("No data available");
         }

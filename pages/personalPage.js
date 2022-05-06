@@ -16,7 +16,7 @@ import addB from '../assets/Images/addB.png';
 import addBGray from '../assets/Images/addBGray.png'
 
 export const PersonalScreen = ({ route, navigation }) => {
-  const { userCredentials, userDitails } = route.params;
+  const { user, userDitails } = route.params;
   const [kidName, setKidName] = useState('');
   const [kidCode, setKidCode] = useState('     ');
   const [errorMsg, setErrorMsg] = useState('');
@@ -53,7 +53,7 @@ export const PersonalScreen = ({ route, navigation }) => {
     setKidCode((code).toString());
 
     //enter ditails to the DB
-    var uId = userCredentials.user.uid;
+    var uId = user.uid;
 
 
     var newKid = { kidName: kidName, kidCode: code.toString() };

@@ -12,7 +12,7 @@ import * as toxicity from '@tensorflow-models/toxicity';
 
 export const KidScreen = ({ navigation }) => {
 
-    /*const AI = () => {
+    const AI = () => {
         // The minimum prediction confidence.
         const threshold = 0.9;
 
@@ -33,7 +33,7 @@ export const KidScreen = ({ navigation }) => {
     };
 
     AI();
-*/
+
 
 const backToSignIn= () => {
     navigation.navigate('SignIn');
