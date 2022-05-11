@@ -10,30 +10,24 @@ import * as firebase from "firebase";
 import { auth } from '../firebase';
 import * as toxicity from '@tensorflow-models/toxicity';
 
+import axios from 'axios';
+
 export const KidScreen = ({ navigation }) => {
 
-    const AI = () => {
-        // The minimum prediction confidence.
-        const threshold = 0.9;
-
-        // Which toxicity labels to return.
-        const labelsToInclude = ['identity_attack', 'insult', 'threat'];
-        console.log("yarin");
-
-        toxicity.load(threshold, labelsToInclude).then(model => {
-            // Now you can use the `model` object to label sentences. 
-            model.classify(['you suck']).then(predictions => 
-                { console.log("mor!!!!!!!!") })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }).catch(function (error) {
-            console.log("load"+error);
-        });
-    };
-
-    AI();
-
+    axios.get('http://192.168.56.1:3000/AI/')
+    .then(function (response) {
+      // handle success
+      console.log(response.request["_response"]);
+      console.log("m");
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+      console.log("y");
+    })
+    .then(function () {
+      // always executed
+    });
 
 const backToSignIn= () => {
     navigation.navigate('SignIn');
