@@ -14,7 +14,9 @@ import axios from 'axios';
 
 export const KidScreen = ({ navigation }) => {
 
-    axios.get('http://192.168.56.1:3000/AI/')
+    var imageUrl = "https://tesseract.projectnaptha.com/img/eng_bw.png";
+
+    axios.get('http://192.168.1.61:3000/AI/', { params: { imageUrl: imageUrl } })
     .then(function (response) {
       // handle success
       console.log(response.request["_response"]);
