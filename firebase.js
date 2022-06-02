@@ -11,7 +11,7 @@ const firebaseConfig = {
   projectId: "kidguard-bff83",
   storageBucket: "kidguard-bff83.appspot.com",
   messagingSenderId: "398441316730",
-  appId: "1:398441316730:web:d423ce9aa15c8ef4ae16c3"
+  appId: "1:398441316730:web:d423ce9aa15c8ef4ae16c3",
 };
 
 // Initialize Firebase
@@ -24,6 +24,9 @@ if (firebase.apps.length == 0) {
 
 const auth = firebase.auth();
 export { auth };
+
+var storage = firebase.storage();
+export { storage };
 
 /**
  * 

@@ -1589,6 +1589,14 @@
     "@firebase/util" "0.3.4"
     tslib "^1.11.1"
 
+"@firebase/component@0.5.14":
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/@firebase/component/-/component-0.5.14.tgz#23d2cc9f4aff5a516c91553a433326d366166bc3"
+  integrity sha512-ct2p1MTMV5P/nGIlkC3XjAVwHwjsIZaeo8JVyDAkJCNTROu5mYX3FBK16hjIUIIVJDpgnnzFh9nP74gciL4WrA==
+  dependencies:
+    "@firebase/util" "1.6.0"
+    tslib "^2.1.0"
+
 "@firebase/database-types@0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@firebase/database-types/-/database-types-0.6.1.tgz#cf1cfc03e617ed4c2561703781f85ba4c707ff65"
@@ -1741,12 +1749,29 @@
     "@firebase/util" "0.3.4"
     tslib "^1.11.1"
 
+"@firebase/storage@^0.9.6":
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/@firebase/storage/-/storage-0.9.6.tgz#496bc8c7e6062b2efc35f8b0f26c4241302c1029"
+  integrity sha512-q8/s3qFbFl+AlKbyEtGA7FRVhcMu3NKPqHueBTn5XSI0B3bfxptBcDJMb9txs69ppve6P3jrK1//TEWpjTGJUg==
+  dependencies:
+    "@firebase/component" "0.5.14"
+    "@firebase/util" "1.6.0"
+    node-fetch "2.6.7"
+    tslib "^2.1.0"
+
 "@firebase/util@0.3.4":
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/@firebase/util/-/util-0.3.4.tgz#e389d0e0e2aac88a5235b06ba9431db999d4892b"
   integrity sha512-VwjJUE2Vgr2UMfH63ZtIX9Hd7x+6gayi6RUXaTqEYxSbf/JmehLmAEYSuxS/NckfzAXWeGnKclvnXVibDgpjQQ==
   dependencies:
     tslib "^1.11.1"
+
+"@firebase/util@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@firebase/util/-/util-1.6.0.tgz#31aea6bba3ee98fc83a60eb189cb187243f4ef4b"
+  integrity sha512-6+hhqb4Zzjoo12xofTDHPkgW3FnN4ydBsjd5X2KuQI268DR3W3Ld64W/gkKPZrKRgUxeNeb+pykfP3qRe7q+vA==
+  dependencies:
+    tslib "^2.1.0"
 
 "@firebase/webchannel-wrapper@0.4.1":
   version "0.4.1"
@@ -11650,6 +11675,11 @@ tslib@^2.0.1, tslib@^2.0.3:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+
+tslib@^2.1.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tty-browserify@0.0.0:
   version "0.0.0"

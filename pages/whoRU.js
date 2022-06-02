@@ -59,7 +59,7 @@ export const WhoRUScreen = ({ navigation }) => {
                 console.log(snapshot.val());
 
                 //console.log("mor: " + snapshot.val()["AFEVA7Ja2qUTwMVYYyUUww4aSaf2"]);
-                navigation.navigate("kidSnapshot");
+                navigation.navigate("kidSnapshot", {code: code});
 
             } else {
                 alert("This code was not found. Please try again.")

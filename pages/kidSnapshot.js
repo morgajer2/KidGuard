@@ -7,19 +7,19 @@ import { general_color, gray_color, orange_color, styles } from './styles/styleS
 import { addNewUser } from '../firebase';
 import * as firebase from "firebase";
 
-import { auth } from '../firebase';
 import * as toxicity from '@tensorflow-models/toxicity';
 import * as ImagePicker from 'expo-image-picker';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { storage } from '../firebase';
 
 
 import axios from 'axios';
 
-export const KidScreen = ({ navigation }) => {
+export const KidScreen = ({ route, navigation }) => {
   const [image, setImage] = useState(null);
-
+  const { code } = route.params;
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -27,29 +27,41 @@ export const KidScreen = ({ navigation }) => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
-      setImage(result.uri);
+      const ref = storage.ref(code + '/image.jpg');
+
+      //convert image to array of bytes
+      const img = await fetch(result.uri);
+      const bytes = await img.blob();
+
+      ref.put(bytes).then(() => {
+        //var imageUrl = "https://tesseract.projectnaptha.com/img/eng_bw.png";
+        ref.getDownloadURL().then((imageUrl) => {
+          console.log("imageUrl: " + imageUrl);
+
+          axios.get('http://192.168.1.61:3000/AI/', { params: { imageUrl: imageUrl } })
+            .then(function (response) {
+              // handle success
+              var response = response.request["_response"];
+              console.log("Got Response: " + response);
+              if (response=='false')
+                ref.delete();
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            })
+            .then(function () {
+              // always executed
+            });
+        });
+
+      })
     }
   };
-/*
-  var imageUrl = "https://tesseract.projectnaptha.com/img/eng_bw.png";
 
-  axios.get('http://192.168.1.61:3000/AI/', { params: { imageUrl: imageUrl } })
-    .then(function (response) {
-      // handle success
-      console.log(response.request["_response"]);
-      console.log("m");
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-      console.log("y");
-    })
-    .then(function () {
-      // always executed
-    });*/
+
+
 
   const backToSignIn = () => {
     navigation.navigate('SignIn');
