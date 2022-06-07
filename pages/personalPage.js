@@ -1,5 +1,5 @@
 
-import { Text, View, TouchableOpacity, ImageBackground, TextInput, Modal, Pressable,FlatList } from 'react-native';
+import { Text, View, TouchableOpacity, ImageBackground, TextInput, Modal, Pressable, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
 import * as React from 'react';
@@ -73,13 +73,13 @@ export const PersonalScreen = ({ route, navigation }) => {
     var temp = {};
     ref = firebase.database().ref('Kids/');
 
-    ref.get().then((snapshot)=>{
-      var temp=snapshot.val();
+    ref.get().then((snapshot) => {
+      var temp = snapshot.val();
       console.log(JSON.stringify(snapshot.val()))
-      temp[code]=uId;
+      temp[code] = uId;
       ref.set(temp);
     })
-    
+
 
     setChildList(userDitails.children);
 
@@ -112,15 +112,15 @@ export const PersonalScreen = ({ route, navigation }) => {
 
 
       <View style={{ flex: 5 }}>
-          <View style={{ flex: 1, paddingTop: 50 }}>
-            <FlatList
-              data={childList}
-              renderItem={({ item }) =>(<View style={{borderRadius: 20.0, backgroundColor: '#fff', overflow: 'hidden', minWidth:'50%',marginBottom:10}}>
-                                        <Text style={styles.item} onPress={()=>{navigation.navigate('imageGallery',{code:item.kidCode})}}>{item.kidName}</Text>
-                                        </View>)}
-            />
-          </View>
-    
+        <View style={{ flex: 1, paddingTop: 50 }}>
+          <FlatList
+            data={childList}
+            renderItem={({ item }) => (<View style={{ borderRadius: 20.0, backgroundColor: '#fff', overflow: 'hidden', minWidth: '50%', marginBottom: 10 }}>
+              <Text style={styles.item} onPress={() => { navigation.navigate('imageGallery', { code: item.kidCode }) }}>{item.kidName}</Text>
+            </View>)}
+          />
+        </View>
+
       </View>
       <View style={{ flex: 1 }}>
         <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }} onPress={() => { setModalVisible(true); setKidName(''); setKidCode('     '); setAddDisable(false); setImgSource(addB); }}>Add a new kid +</Text>

@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, ImageBackground, TextInput, KeyboardAvoidingView, ScrollView, Dimensions, Image, FlatList } from 'react-native';
+import { Text, View, AppRegistry, TouchableWithoutFeedback, Modal, TouchableOpacity, ImageBackground, TextInput, KeyboardAvoidingView, ScrollView, Dimensions, Image, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 
@@ -8,15 +8,43 @@ import * as firebase from "firebase";
 
 import { auth } from '../firebase';
 import * as toxicity from '@tensorflow-models/toxicity';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
+function renderCategoryItem({ imageUrl, id }) {
+    return (
+
+        <TouchableOpacity key={id}>
+            <Text>mami</Text>
+            <Image source={{ uri: imageUrl }}
+                style={{ width: 400, height: 400 }} />
+        </TouchableOpacity>
+    )
+
+}
 export const ImageGalleryScreen = ({ route, navigation }) => {
     const { code } = route.params;
-    const [images, setImages] = useState([{ id: '1', Image: require('../assets/Images/addB.png') }, { id: '2', Image: require('../assets/Images/addBGray.png') }]);
     const { width } = Dimensions.get('window');
+    var images = [{ id: 1, url: 'https://firebasestorage.googleapis.com/v0/b/kidguard-bff83.appspot.com/o/4771%2Fimage.jpg?alt=media&token=192b9def-47dc-4241-a460-f3f833aaa519' }, { id: 2, url: 'https://firebasestorage.googleapis.com/v0/b/kidguard-bff83.appspot.com/o/4771%2Fimg.jpg?alt=media&token=e213103d-c154-469b-a59c-7bb3c9d95b3e' }];
+
     const SPACING = 10;
     const THUMB_SIZE = 80;
 
+    {/*state = {
+        modalVisible: false,
+        modalImage: require('../assets/Images/addB.png'),
+        images: [
+            require('../assets/Images/addBGray.png'),
+            require('../assets/Images/hatGray.png')
+        ]
+    }
+
+setMosalVisible(visible, imageKey);*/}
+
     return (
+        <View>
+            {images ? images.map((image) => renderCategoryItem({ imageUrl: image.url, id: image.id })) : <Text>test</Text>}
+        </View>
+        /*
         <View style={styles.container}>
             <LinearGradient
                 // Background Linear Gradient
@@ -24,22 +52,17 @@ export const ImageGalleryScreen = ({ route, navigation }) => {
                 style={styles.background}
             />
             <Text style={{ fontWeight: 'bold', fontSize: 25 }}>{code}</Text>
-            <View style={{ height: '90%', width: '90%', borderRadius: 10.0, backgroundColor: '#fff', overflow: 'hidden' }}>
-                <Text
-                    style={{
-                        color: 'white',
-                        fontSize: 32,
-                        marginTop: 50,
-                        marginBottom: 25
-                    }}
-                >
-                    Custom Gallery
-                </Text>
-                {/* Carousel View */}
-                {/* Thumbnail component using FlatList */}
-            </View>
+            <View style={{ flex: 5 }}>
+                <View style={{ flex: 1, paddingTop: 50 }}>
+                {images ? images.map((image) => renderCategoryItem({imageUrl:image.url, id:image.id})): <Text>test</Text>}
 
-        </View>
+                </View>
+
+
+            </View>
+            </View>
+            */
     );
+
 
 };
