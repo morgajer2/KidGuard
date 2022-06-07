@@ -14,9 +14,8 @@ function renderCategoryItem({ imageUrl, id }) {
     return (
 
         <TouchableOpacity key={id}>
-            <Text>mami</Text>
-            <Image source={{ uri: imageUrl }}
-                style={{ width: 400, height: 400 }} />
+            <Image source={{ uri: imageUrl }} 
+                style={{ width: '90%',  maxHeight: 400, minHeight:200, alignSelf:'center', margin:5 }} resizeMode='contain' />
         </TouchableOpacity>
     )
 
@@ -41,10 +40,7 @@ export const ImageGalleryScreen = ({ route, navigation }) => {
 setMosalVisible(visible, imageKey);*/}
 
     return (
-        <View>
-            {images ? images.map((image) => renderCategoryItem({ imageUrl: image.url, id: image.id })) : <Text>test</Text>}
-        </View>
-        /*
+
         <View style={styles.container}>
             <LinearGradient
                 // Background Linear Gradient
@@ -52,16 +48,16 @@ setMosalVisible(visible, imageKey);*/}
                 style={styles.background}
             />
             <Text style={{ fontWeight: 'bold', fontSize: 25 }}>{code}</Text>
-            <View style={{ flex: 5 }}>
-                <View style={{ flex: 1, paddingTop: 50 }}>
-                {images ? images.map((image) => renderCategoryItem({imageUrl:image.url, id:image.id})): <Text>test</Text>}
-
+            <ScrollView style={{ height: '80%', width: '90%', borderRadius: 10.0, backgroundColor: '#fff', overflow: 'hidden' }}>
+                <View>
+                    {images ? images.map((image) => renderCategoryItem({ imageUrl: image.url, id: image.id })) : <Text>test</Text>}
                 </View>
-
+            </ScrollView>
+            <View>
 
             </View>
-            </View>
-            */
+        </View>
+
     );
 
 
