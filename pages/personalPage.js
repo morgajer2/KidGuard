@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, ImageBackground, TextInput, Modal, Pressa
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
 import * as React from 'react';
-import { auth } from '../firebase';
+import { auth, storage } from '../firebase';
 import { getAuth } from "firebase/auth";
 import { useState } from 'react';
 import * as firebase from "firebase";
@@ -49,7 +49,7 @@ export const PersonalScreen = ({ route, navigation }) => {
     setImgSource(addBGray);
 
     //generate code
-    var code = Math.floor(Math.random() * 9999) + 1000
+    var code = Math.floor(Math.random() * 9999) + 1000;
     setKidCode((code).toString());
 
     //enter ditails to the DB
@@ -70,13 +70,12 @@ export const PersonalScreen = ({ route, navigation }) => {
     var ref = firebase.database().ref('users/' + uId + '/children/');
     ref.set(userDitails.children);
 
-    var temp = {};
     ref = firebase.database().ref('Kids/');
 
     ref.get().then((snapshot) => {
       var temp = snapshot.val();
       console.log(JSON.stringify(snapshot.val()))
-      temp[code] = uId;
+      temp[code] = { parent: uId, images: [] };
       ref.set(temp);
     })
 
@@ -85,6 +84,28 @@ export const PersonalScreen = ({ route, navigation }) => {
 
 
   }
+
+  const moveToImageGallery = (code, name) => {
+    console.log(code);
+
+    const dbRef = firebase.database().ref();
+    var ref = dbRef.child("Kids").child(code).child("\images");
+    ref.get().then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(JSON.stringify(snapshot.val()));
+
+        //navigate to kid's gallery
+        navigation.navigate('imageGallery', { code: code, name: name, images: snapshot.val() })
+      } else {
+        console.log("No data available");
+        navigation.navigate('imageGallery', { code: code, name: name, images: [] })
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  }
+
 
 
 
@@ -96,7 +117,7 @@ export const PersonalScreen = ({ route, navigation }) => {
         colors={['#0F8CFF', '#274EF3', '#3E8CE8']}
         style={styles.background}
       />
-      <View style={[{ backgroundColor: "white", width: '100%', flex: 1, flexDirection: 'row' }]}>
+      <View style={[{ backgroundColor: "white", width: '100%', flex: 1, flexDirection: 'row' , paddingBottom:20}]}>
         <View style={{ paddingTop: 25, paddingLeft: 10 }}>
           <Image source={require('../assets/Images/mainIcon.png')} />
         </View>
@@ -104,7 +125,7 @@ export const PersonalScreen = ({ route, navigation }) => {
           <Text style={{ fontSize: 12, textAlign: 'left', color: gray_color, paddingLeft: 10, paddingTop: 25 }}>Welcome back</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontSize: 20, textAlign: 'left', color: general_color, paddingLeft: 10, fontWeight: 'bold' }}>{userDitails["fullName"]}</Text>
-            <Text style={{ fontSize: 20, textAlign: 'right', color: general_color, paddingLeft: 150, textAlign: 'left', fontWeight: 'bold' }} onPress={logOut}>log out</Text>
+            <Text style={{ fontSize: 20, textAlign: 'right', color: general_color, paddingLeft: 120, textAlign: 'left', fontWeight: 'bold' }} onPress={logOut}>log out</Text>
           </View>
 
         </View>
@@ -116,7 +137,7 @@ export const PersonalScreen = ({ route, navigation }) => {
           <FlatList
             data={childList}
             renderItem={({ item }) => (<View style={{ borderRadius: 20.0, backgroundColor: '#fff', overflow: 'hidden', minWidth: '50%', marginBottom: 10 }}>
-              <Text style={styles.item} onPress={() => { navigation.navigate('imageGallery', { code: item.kidCode }) }}>{item.kidName}</Text>
+              <Text style={styles.item} onPress={() => { moveToImageGallery(item.kidCode, item.kidName); }}>{item.kidName}</Text>
             </View>)}
           />
         </View>
