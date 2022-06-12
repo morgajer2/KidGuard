@@ -56,17 +56,6 @@ export const KidScreen = ({ route, navigation }) => {
       quality: 1,
     });
 
-    var refP = firebase.database().ref("users/" + parentCode + "/token").get().then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log("1 "+ snapshot.val());
-        sendPushNotification(snapshot.val());
-      } else {
-        console.log("did not find parent token");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-
     if (!result.cancelled) {
 
       var imageName = Math.floor(Math.random() * 9999) + 1000;
@@ -111,9 +100,10 @@ export const KidScreen = ({ route, navigation }) => {
                   }
 
                   //send push-notification to parent:
-                  var refP = firebase.database().ref("users/" + parentCode + "/token").get().then(async () => {
+                  var refP = firebase.database().ref("users/" + parentCode + "/token").get().then((snapshot) => {
                     if (snapshot.exists()) {
-                      await sendPushNotification(snapshot.val());
+                      console.log("1 "+ snapshot.val());
+                      sendPushNotification(snapshot.val());
                     } else {
                       console.log("did not find parent token");
                     }
