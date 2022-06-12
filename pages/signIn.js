@@ -3,17 +3,110 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
 import * as React from 'react';
 import { auth } from '../firebase';
-import { useState } from 'react';
 
 import * as firebase from "firebase";
 
 import { general_color, gray_color, orange_color, styles } from './styles/styleSheet1';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { useState, useEffect, useRef } from 'react';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export const SignInScreen = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  //-----------push-notifications----------------
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+      var code1 = response.notification.request.trigger.remoteMessage.data.body;
+      var code2 = JSON.parse(code1);
+      console.log("code: " + code2.code);
+      moveToImageGallery(code2.code, code2.name);
+
+    });
+
+    const moveToImageGallery = (code, name) => {
+      console.log(code);
+
+      const dbRef = firebase.database().ref();
+      var ref = dbRef.child("Kids").child(code).child("\images");
+      ref.get().then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(JSON.stringify(snapshot.val()));
+
+          //navigate to kid's gallery
+          navigation.navigate('imageGallery', { code: code, name: name, images: snapshot.val() })
+        } else {
+          console.log("No data available");
+          navigation.navigate('imageGallery', { code: code, name: name, images: [] })
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+
+    }
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    return token;
+  }
 
 
   const signIn = () => {
@@ -38,8 +131,12 @@ export const SignInScreen = ({ navigation }) => {
       var ref = dbRef.child("users").child(user.uid);
       ref.get().then((snapshot) => {
         if (snapshot.exists()) {
-          console.log("SIGN-IN- user found: "+ JSON.stringify(snapshot.val()));
-          navigation.navigate('personalPage',{user: userCredentials.user, userDitails: snapshot.val()});
+          console.log("SIGN-IN- user found: " + JSON.stringify(snapshot.val()));
+
+          //save notification token to the DB:
+          ref.child("token").set(expoPushToken);
+
+          navigation.navigate('personalPage', { user: userCredentials.user, userDitails: snapshot.val() });
         } else {
           console.log("No data available");
         }

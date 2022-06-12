@@ -1,23 +1,52 @@
 import { Text, View, TouchableOpacity, ImageBackground, Button, TextInput, KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'react-native';
-import React, { useState } from 'react';
 
 import { general_color, gray_color, orange_color, styles } from './styles/styleSheet1';
 import { addNewUser } from '../firebase';
 import * as firebase from "firebase";
 
-import * as toxicity from '@tensorflow-models/toxicity';
 import * as ImagePicker from 'expo-image-picker';
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
 import { storage } from '../firebase';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import React, { useState, useEffect, useRef } from 'react';
 
 
 import axios from 'axios';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export const KidScreen = ({ route, navigation }) => {
   const [image, setImage] = useState(null);
-  const { code } = route.params;
+  const { code, parentCode, name } = route.params;
+
+  async function sendPushNotification(expoPushToken) {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'New notification from KidGuard app',
+      body:  name+' has a new screenshot. Enter the app and go to '+name+'\'s screenshots page',
+      data: { code: code , name:name}
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -25,6 +54,17 @@ export const KidScreen = ({ route, navigation }) => {
       allowsEditing: true,
       //aspect: [4, 3],
       quality: 1,
+    });
+
+    var refP = firebase.database().ref("users/" + parentCode + "/token").get().then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("1 "+ snapshot.val());
+        sendPushNotification(snapshot.val());
+      } else {
+        console.log("did not find parent token");
+      }
+    }).catch((error) => {
+      console.error(error);
     });
 
     if (!result.cancelled) {
@@ -69,6 +109,19 @@ export const KidScreen = ({ route, navigation }) => {
 
                     ref2.set([imageUrl]);
                   }
+
+                  //send push-notification to parent:
+                  var refP = firebase.database().ref("users/" + parentCode + "/token").get().then(async () => {
+                    if (snapshot.exists()) {
+                      await sendPushNotification(snapshot.val());
+                    } else {
+                      console.log("did not find parent token");
+                    }
+                  }).catch((error) => {
+                    console.error(error);
+                  });
+
+
                 }).catch((error) => {
                   console.log(error);
 

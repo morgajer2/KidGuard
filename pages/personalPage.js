@@ -75,7 +75,7 @@ export const PersonalScreen = ({ route, navigation }) => {
     ref.get().then((snapshot) => {
       var temp = snapshot.val();
       console.log(JSON.stringify(snapshot.val()))
-      temp[code] = { parent: uId, images: [] };
+      temp[code] = { parent: uId, images: [], name:kidName };
       ref.set(temp);
     })
 
